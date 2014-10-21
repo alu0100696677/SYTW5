@@ -35,10 +35,41 @@ DataMapper.auto_upgrade!
 Base = 36
 
 get '/' do
-  puts "inside get '/': #{params}"
-  @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
-  # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
-  haml :index
+
+	if @auth then
+		begin
+		redirect '/auth/failure'
+		end
+		else
+		%Q|<a href= '/auth/google_oauth2'>Identificarse con Google</a></BR><a href='/auth/failure'>No identificarse con Google</a>|
+		end|
+
+	end
+	
+	get '/auth/:name/callback' do
+		@auth = request.env['omniauth.auth']
+		$nombre = @auth['info'].email
+		if @auth then
+		begin
+			puts "inside get '/': #{params}"
+			@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
+			# in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
+			haml :index
+		end
+		else
+			redirect '/auth/failure'
+		end
+		
+	end
+
+end
+
+get '/auth/failure' do
+	
+	puts "inside get '/': #{params}"
+	@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
+
+	haml :index
 end
 
 post '/' do
