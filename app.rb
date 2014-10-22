@@ -33,6 +33,7 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 Base = 36
+$email = "ejemplo@example"
 
 get '/' do
 
@@ -48,11 +49,11 @@ get '/' do
 	
 	get '/auth/:name/callback' do
 		@auth = request.env['omniauth.auth']
-		$nombre = @auth['info'].email
+		$email = @auth['info'].email
 		if @auth then
 		begin
 			puts "inside get '/': #{params}"
-			@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
+			@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20, :id_usu => $email)
 			# in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
 			haml :index
 		end
@@ -67,7 +68,7 @@ end
 get '/auth/failure' do
 	
 	puts "inside get '/': #{params}"
-	@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
+	@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20, :id_usu => " ")
 
 	haml :index
 end
@@ -78,9 +79,9 @@ post '/' do
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
 	if params[:to] == ""
-		@short_url = ShortenedUrl.first_or_create(:url => params[:url])
+		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :id_usu => $email)
 	else
-		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :to => params[:to])
+		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :to => params[:to], :id_usu => $email)
 	end
     rescue Exception => e
       puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
