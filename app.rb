@@ -40,11 +40,12 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 Base = 36
-session[:email] = " "
+
 
 get '/' do
   puts "inside get '/': #{[params]}"
-  @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
+  session[:email] = " "
+  @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20, :id_usu => " ") 
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
   haml :index
 
@@ -52,10 +53,10 @@ end
 
 
 get '/auth/:name/callback' do
-	@auth = request.env['omniauth.auth']
-	session[:nombre] = @auth['info'].email
+	session[:auth] = @auth = request.env['omniauth.auth']
+	session[:email] = @auth['info'].email
 
-	if @auth then
+	if session[:auth] then #@auth
 		begin
 			puts "inside get '/': #{params}"
 			@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20, :id_usu => session[:email])
@@ -69,13 +70,10 @@ get '/auth/:name/callback' do
 end
 
 get '/auth/failure' do
-	
-	puts "inside get '/': #{params}"
-	session[:email] = " "
-	@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20, :id_usu => session[:email])
-
-	haml :index
+  session.clear
+  redirect '/'
 end
+
 
 post '/' do
   puts "inside post '/': #{params}"
@@ -83,21 +81,22 @@ post '/' do
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
         #@short_url = ShortenedUrl.first_or_create(:url => params[:url])
-	if params[:to] == " "
-		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :id_usu => session[:email])
-	else
-		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :to => params[:to], :id_usu => session[:email])
-	end
-    rescue Exception => e
-      puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
-      pp @short_url
-      puts e.message
+    	if params[:to] == " "
+    		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :id_usu => session[:email])
+    	else
+    		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :to => params[:to], :id_usu => session[:email])
+    	end
+      rescue Exception => e
+        puts "EXCEPTION!!!!!!!!!!!!!!!!!!!"
+        pp @short_url
+        puts e.message
     end
   else
     logger.info "Error! <#{params[:url]}> is not a valid URL"
   end
   redirect '/'
 end
+
 
 get '/:shortened' do
   puts "inside get '/:shortened': #{params}"
