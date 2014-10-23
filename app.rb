@@ -32,51 +32,39 @@ DataMapper.finalize
 DataMapper.auto_upgrade!
 
 Base = 36
+session[:email] = " "
 
 get '/' do
-  puts "inside get '/': #{params}"
+
   @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
   haml :index
-  session[:email] = " "
+
 end
 
-get '/' do
+
+get '/auth/:name/callback' do
+	@auth = request.env['omniauth.auth']
+	session[:nombre] = @auth['info'].email
 
 	if @auth then
-
-		begin
-		redirect '/auth/failure' #Si el usuario no se identifica
-		end
-		else
-		%Q|<a href='/auth/google_oauth2'>Identificarse con Google</a></BR><a href='/auth/failure'>No identificarse con Google</a>
-		end
-
-	end
-	
-	get '/auth/:name/callback' do
-
-		@auth = request.env['omniauth.auth']
-		session[:nombre] = @auth['info'].email
-		if @auth then
 		begin
 			puts "inside get '/': #{params}"
 			@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20, :id_usu => session[:email])
 			# in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
 			haml :index
 		end
-		else
-			redirect '/auth/failure'
-		end
-		
+	else
+		redirect '/auth/failure'
 	end
-
+		
 end
 
 get '/auth/failure' do
 	
 	puts "inside get '/': #{params}"
-	@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20, :id_usu => " ")
+	session[:email] = " "
+	@list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20, :id_usu => session[:email])
 
 	haml :index
 end
