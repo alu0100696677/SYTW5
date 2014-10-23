@@ -2,15 +2,14 @@ source 'https://rubygems.org'
 
 #gem 'alphadecimal'
 gem 'data_mapper'
-gem 'dm-sqlite-adapter'
-gem 'sqlite3'
+gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'haml'
-
 gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'pry'
 gem 'erubis'
+
 
 group :production do
 	gem "pg"
