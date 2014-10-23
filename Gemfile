@@ -11,3 +11,6 @@ gem 'omniauth'
 gem 'omniauth-google-oauth2'
 gem 'pry'
 gem 'erubis'
+
+group :production do
+	gem "pg"
