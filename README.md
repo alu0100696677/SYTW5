@@ -1,10 +1,10 @@
 
-Sistemas y Tecnologías Web.
+Sistemas y Tecnologías Web
 ===========
 Acortador de URL's
 
 
-Autor
+Desarrolladores
 -----------
 
 - Mª Belén Armas Torres 
@@ -13,21 +13,25 @@ Autor
 Objetivo
 -----------
 
-Desarrollar un acortador de url de modo que si el usuario está autenticado se le ofrece una opción para ver la lista de sus links, desplegarlo en Heroku con DataMaper
+Ampliar el acortador de url para que admita abreviaciones escritas por el usuario además, si el usuario está autenticado se le ofrecerá la opción de ver una lista con sus links. Todo esto se deplegará en Heroku con DataMapper.
 
+Enlace
+--------------
+
+* [Acortador] (https://sytw-shortener.herokuapp.com)
 
 Instalación
 --------------
 
 1. Instalaremos las gemas necesarias: `bundle install`
-2. Configuraremos el fichero `configure.rb` siguiendo las directrices del fichero `configure.rb.example`
+2. Configuraremos el fichero `config.yml` añadiendo los identificadores utilizados en la practica anterior.
 
 
-Ejecución
+Documentación de Interés
 ------------
 
-Podemos ejecutarlo así:
-
-1. Para arranccar los tests unitarios: `rake`
-2. Para lanzar la aplicación: `rake server`
-3. Iremos a [http://localhost:4567/](http://localhost:4567/) para poder usar la aplicación
+* [DataMapper](http://datamapper.org/getting-started.html)
+* [Haml](http://haml.info/)
+* [Sinatra](http://www.sinatrarb.com/)
+* [Deploying Rack-based Apps in Heroku](https://devcenter.heroku.com/articles/rack)
+* [Intridea Omniauth](https://github.com/intridea/omniauth)
