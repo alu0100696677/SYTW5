@@ -4,13 +4,12 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'haml'
 require 'uri'
-require 'pp'
-#require 'socket'
 require 'data_mapper'
 require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
 require 'pry'
 require 'erubis'
+require 'pp'
 
 use OmniAuth::Builder do
   config = YAML.load_file 'config/config.yml'
