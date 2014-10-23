@@ -39,22 +39,25 @@ get '/' do
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
   haml :index
   session[:email] = "ejemplo@example"
+end
 
 get '/' do
 
 	if @auth then
+
 		begin
-		redirect '/auth/failure'
+		redirect '/auth/failure' #Si el usuario no se identifica
 		end
 		else
-		%Q|<a href= '/auth/google_oauth2'>Identificarse con Google</a></BR><a href='/auth/failure'>No identificarse con Google</a>|
-		end|
+		%Q|<a href='/auth/google_oauth2'>Identificarse con Google</a></BR><a href='/auth/failure'>No identificarse con Google</a>
+		end
 
 	end
 	
 	get '/auth/:name/callback' do
+
 		@auth = request.env['omniauth.auth']
-		session[:email] = @auth['info'].email
+		session[:nombre] = @auth['info'].email
 		if @auth then
 		begin
 			puts "inside get '/': #{params}"
