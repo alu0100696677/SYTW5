@@ -38,7 +38,7 @@ get '/' do
   @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
   haml :index
-  session[:email] = "ejemplo@example"
+  session[:email] = " "
 end
 
 get '/' do
@@ -86,8 +86,8 @@ post '/' do
   uri = URI::parse(params[:url])
   if uri.is_a? URI::HTTP or uri.is_a? URI::HTTPS then
     begin
-      @short_url = ShortenedUrl.first_or_create(:url => params[:url])
-	if params[:to] == ""
+        #@short_url = ShortenedUrl.first_or_create(:url => params[:url])
+	if params[:to] == " "
 		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :id_usu => session[:email])
 	else
 		@short_url = ShortenedUrl.first_or_create(:url => params[:url], :to => params[:to], :id_usu => session[:email])
@@ -106,6 +106,7 @@ end
 get '/:shortened' do
   puts "inside get '/:shortened': #{params}"
   short_url = ShortenedUrl.first(:id => params[:shortened].to_i(Base))
+
   to_url = ShortenedUrl.first(:to => params[:shortened])
 
   # HTTP status codes that start with 3 (such as 301, 302) tell the
@@ -114,7 +115,7 @@ get '/:shortened' do
   # is no longer at the original location. The two most commonly used
   # redirection status codes are 301 Move Permanently and 302 Found.
 
-  redirect short_url.url, 301
+  #redirect short_url.url, 301
   
   if to_url
 	redirect to_url.url, 301
