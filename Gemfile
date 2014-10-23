@@ -2,6 +2,7 @@ source 'https://rubygems.org'
 
 #gem 'alphadecimal'
 gem 'data_mapper'
+gem 'sinatra'
 gem 'sinatra-contrib'
 gem 'haml'
 gem 'omniauth'
