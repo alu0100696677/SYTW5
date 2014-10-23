@@ -40,7 +40,7 @@ Base = 36
 session[:email] = " "
 
 get '/' do
-
+  puts "inside get '/': #{[params]}"
   @list = ShortenedUrl.all(:order => [ :id.asc ], :limit => 20)
   # in SQL => SELECT * FROM "ShortenedUrl" ORDER BY "id" ASC
   haml :index
