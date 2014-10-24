@@ -4,6 +4,7 @@ require 'sinatra'
 require 'sinatra/reloader' if development?
 require 'haml'
 require 'uri'
+require 'data_mapper'
 require 'omniauth-oauth2'
 require 'omniauth-google-oauth2'
 require 'pry'

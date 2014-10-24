@@ -11,7 +11,7 @@ end
 # substitute XXX for the name of your app
 desc "create heroku app"
 task :create, :appname do |t,args|
-  name = args[:appname] || 'XXX';
+  name = args[:appname] || 'Shortener';
   sh "heroku create #{name}"
 end
 
@@ -32,7 +32,7 @@ end
 
 desc "destroy deployment in heroku"
 task :logs, :appname  do
-  name = args[:appname] || 'XXX';
+  name = args[:appname] || 'Shortener';
   sh "heroku apps:destroy #{name}"
 end
 
